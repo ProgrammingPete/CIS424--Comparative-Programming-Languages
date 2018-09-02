@@ -45,7 +45,7 @@ def main():
         file_name = sys.argv[1]
     except IndexError:
         print('No argument found, exiting...')
-        sys.exit
+        exit()
 
     data = find_file(file_name)
     datadict = create_dict(data)
