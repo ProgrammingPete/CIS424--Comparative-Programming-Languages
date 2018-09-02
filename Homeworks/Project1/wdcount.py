@@ -33,8 +33,8 @@ def main():
     then print words based on certain conditions:
         Number of different words (number of dictionary entries)
         Total number of words in the file (num of dict entries * number of occurences)
-        Each word that has more than 5 characters along with its number of occurrences (most frequent word should be printed first)
-            - key length greater than 5
+        Each word that has more than 4 characters along with its number of occurrences (most frequent word should be printed first)
+            - key length greater than 4
         The longest word in the file (either one if there is two of the same length)
             - maximum key length
 
@@ -60,7 +60,7 @@ def main():
     #Each word that has more than 5 characters along with its number of ocurrences
     print("These words have more than 5 characters:")
     for key in datadict.keys():
-        if len(key) > 5:
+        if len(key) > 4:
             print("word: %s, Number of Occurrences: %s" % (key, datadict.get(key)))
 
     
