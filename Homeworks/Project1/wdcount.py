@@ -57,8 +57,8 @@ def main():
     sortedList = sorted(data, key= lambda word: len(word), reverse=True)
     print("longest word in the file: ", sortedList[0])
     
-    #Each word that has more than 5 characters along with its number of ocurrences
-    print("These words have more than 5 characters:")
+    #Each word that has more than 4 characters along with its number of ocurrences
+    print("These words have more than 4 characters:")
     for key in datadict.keys():
         if len(key) > 4:
             print("word: %s, Number of Occurrences: %s" % (key, datadict.get(key)))
