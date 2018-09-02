@@ -59,9 +59,13 @@ def main():
     
     #Each word that has more than 4 characters along with its number of ocurrences
     print("These words have more than 4 characters:")
+    temp_list = list()
     for key in datadict.keys():
         if len(key) > 4:
-            print("word: %s, Number of Occurrences: %s" % (key, datadict.get(key)))
+            temp_list.append(key)
+    temp_list = sorted(temp_list, key = lambda word: datadict.get(word), reverse=True)
+    for word in temp_list:
+        print("word: %s, Number of Occurrences: %s" % (word, datadict.get(word)))
 
     
 main()
