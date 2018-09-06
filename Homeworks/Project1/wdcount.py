@@ -20,8 +20,15 @@ def find_file(file_name):
 
 def create_dict(data):
     import collections
-    datadict = collections.Counter(data)
+    #datadict = collections.Counter(data)
     #print(datadict)
+    datadict = dict()
+    for word in data:
+        if word not in datadict:
+            datadict[word] = 1
+        else:
+            datadict[word] += 1
+            
     return datadict
 
 def main():
@@ -59,9 +66,9 @@ def main():
 
     maxlen = data[0]
     for word in data:
-        if len(word) > len(maxlen):
-            max = word
-    print("longest word in the file: ", max)
+        if len(word) >= len(maxlen):
+            maxlen = word
+    print("longest word in the file: ", maxlen)
 
     
 
