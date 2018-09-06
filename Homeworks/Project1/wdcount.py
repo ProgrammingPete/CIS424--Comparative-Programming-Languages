@@ -54,8 +54,15 @@ def main():
     print("Total number of words: ", len(data))
 
     #The longest word in the file
-    sortedList = sorted(data, key= lambda word: len(word), reverse=True)
-    print("longest word in the file: ", sortedList[0])
+    #sortedList = sorted(data, key= lambda word: len(word), reverse=True)
+    #print("longest word in the file: ", sortedList[0])
+
+    maxlen = data[0]
+    for word in data:
+        if len(word) > len(maxlen):
+            max = word
+    print("longest word in the file: ", max)
+
     
     #Each word that has more than 4 characters along with its number of ocurrences
     print("These words have more than 4 characters:")
@@ -63,7 +70,7 @@ def main():
     for key in datadict.keys():
         if len(key) > 4:
             temp_list.append(key)
-    temp_list = sorted(temp_list, key = lambda word: datadict.get(word), reverse=True)
+    temp_list = sorted(temp_list, key = datadict.get, reverse=True)
     for word in temp_list:
         print("word: %s, Number of Occurrences: %s" % (word, datadict.get(word)))
 
