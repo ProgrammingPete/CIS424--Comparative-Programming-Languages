@@ -10,24 +10,24 @@ def find_file(file_name):
     with open(file_name) as file:
         for row in file:
             data += row.split(' ')
-    
+
     for i, word  in enumerate(data): #removes the new line character
         if '\n' in word:
             data[i] = word.strip('\n')
-            
+
     #print(data)
     return data
 
 def create_dict(data):
-    import collections    
-    datadict = collections.Counter(data)        
+    import collections
+    datadict = collections.Counter(data)
     #print(datadict)
     return datadict
 
 def main():
     """
     Author: Peter Parianos
-    
+
     This program will count the number of words in a file given as a command line argument,
     store each name and the number of occurences in a dict,
     then print words based on certain conditions:
@@ -49,7 +49,7 @@ def main():
 
     data = find_file(file_name)
     datadict = create_dict(data)
-    
+
     print("Number of unique words: ", len(datadict))
     print("Total number of words: ", len(data))
 
@@ -64,6 +64,7 @@ def main():
     print("longest word in the file: ", max)
 
     
+
     #Each word that has more than 4 characters along with its number of ocurrences
     print("These words have more than 4 characters:")
     temp_list = list()
@@ -74,8 +75,5 @@ def main():
     for word in temp_list:
         print("word: %s, Number of Occurrences: %s" % (word, datadict.get(word)))
 
-    
-main()
 
-    
-    
+main()
