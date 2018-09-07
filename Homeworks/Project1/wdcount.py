@@ -19,9 +19,6 @@ def find_file(file_name):
     return data
 
 def create_dict(data):
-    import collections
-    #datadict = collections.Counter(data)
-    #print(datadict)
     datadict = dict()
     for word in data:
         if word not in datadict:
@@ -64,11 +61,11 @@ def main():
     #sortedList = sorted(data, key= lambda word: len(word), reverse=True)
     #print("longest word in the file: ", sortedList[0])
 
-    maxlen = data[0]
+    maxword = data[0]
     for word in data:
-        if len(word) >= len(maxlen):
-            maxlen = word
-    print("longest word in the file: ", maxlen)
+        if len(word) >= len(maxword):
+            maxword = word
+    print("longest word in the file: ", maxword)
 
     
 
@@ -78,7 +75,7 @@ def main():
     for key in datadict.keys():
         if len(key) > 4:
             temp_list.append(key)
-    temp_list = sorted(temp_list, key = datadict.get, reverse=True)
+    temp_list = sorted(temp_list, key = lambda word: datadict.get(word), reverse=True)
     for word in temp_list:
         print("word: %s, Number of Occurrences: %s" % (word, datadict.get(word)))
 
