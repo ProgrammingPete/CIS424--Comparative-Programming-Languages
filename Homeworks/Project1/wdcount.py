@@ -21,10 +21,10 @@ def find_file(file_name):
 def create_dict(data):
     datadict = dict()
     for word in data:
-        if word not in datadict:
-            datadict[word] = 1
+        if word.lower() not in datadict:
+            datadict[word.lower()] = 1
         else:
-            datadict[word] += 1
+            datadict[word.lower()] += 1
             
     return datadict
 
@@ -75,7 +75,7 @@ def main():
     for key in datadict.keys():
         if len(key) > 4:
             temp_list.append(key)
-    temp_list = sorted(temp_list, key = lambda word: datadict.get(word), reverse=True)
+    temp_list = sorted(temp_list, key = datadict.get, reverse=True)
     for word in temp_list:
         print("word: %s, Number of Occurrences: %s" % (word, datadict.get(word)))
 
