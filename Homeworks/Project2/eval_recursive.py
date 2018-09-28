@@ -31,13 +31,13 @@ def match(string):
         
 def id_list(symtab, _type):
     global lookahead
-    _id = lookahead
+    Id = lookahead
     if Id not in symtab:
         if _type == 'int':
             symtab[Id] = [int,0]
-        if _type == 'real':
+        elif _type == 'real':
             symtab[Id] = [float,0]
-        elif:
+        else:
             print('Syntax Error: Invalid Type')
             exit()
         match(Id)
@@ -59,7 +59,7 @@ def decl_list(symtab):
     global lookahead
     symtab = decl(symtab)
     while lookahead == 'int' or lookahead == 'real':
-        decl()
+        symtab = decl(symtab)
     return symtab     
 def prog():
     global lookahead

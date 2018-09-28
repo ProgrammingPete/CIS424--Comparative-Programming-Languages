@@ -1,6 +1,6 @@
 int   s , t ;
 real  r , pi ;
-print 2 + 3 * 4 ;
+printi 2 + 3 * 4 ;
 s = 2 + 3 ;
 t = 7 if s < 4 else 5 ;
 printi s * t ^ 2 ;
