@@ -125,9 +125,11 @@ def stmt_list():
     elif lookahead == 'printi':
         match('printi')
         print(expr(int))
+        match(';')
     elif lookahead == 'printr':
         match('printr')
         print(expr(float))
+        match(';')
 
 def prog():
     global lookahead
