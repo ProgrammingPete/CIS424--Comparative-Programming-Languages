@@ -113,6 +113,7 @@ def stmt():
             match('=')
             symtab[_id][1] = expr(_type)
             if lookahead == 'if':
+                match('if')
                 _cond = cond()
                 match('else')
                 if _cond == False:
@@ -130,6 +131,9 @@ def stmt():
         match('printr')
         print(expr(float))
         match(';')
+    else:
+        print('Syntax Error: Invalid Symbol')
+        exit()
 
 def stmt_list():
     global lookahead
