@@ -21,70 +21,139 @@ def lexan():
     except StopIteration:
         return ''
 
-def match(string):
+def match(ch):
     global lookahead
-    if string == lookahead:
+    if ch == lookahead:
         lookahead = lexan()
     else:
-        print(' Syntax Error')
+        print('Syntax Error')
         exit()
         
-def id_list(symtab, _type):
+def id_list(_type):
     global lookahead
-    Id = lookahead
-    if Id not in symtab:
+    global symtab
+    _id = lookahead
+    if _id not in symtab:
         if _type == 'int':
-            symtab[Id] = [int,0]
+            symtab[_id] = [int,0]
         elif _type == 'real': #reals stored as float
-            symtab[Id] = [float,0]
-        else:
-            print('Syntax Error: Invalid Type')
-            exit()
-        match(Id)
+            symtab[_id] = [float,0]
+        match(_id)
     if lookahead == ',':
         match(',')
-        id_list(symtab, _type) #recursion
-    return symtab
+        if isId(lookahead):
+            id_list(_type) #recursion
     
-def decl(symtab):
+def decl():
     global lookahead
     _type = lookahead
     match(_type)
     if isId(lookahead): 
-        symtab = id_list(symtab, _type)
+        id_list(_type)
     match(';')
-    return symtab
-
-def decl_list(symtab):
+    
+def decl_list():
     global lookahead
-    symtab = decl(symtab)
+    decl()
     while isType(lookahead):
-        symtab = decl(symtab)
-    return symtab
+        decl()
+        
+def oprnd(_oprnd):
+    global symtab
+    if _oprnd in symtab:
+        match(_oprnd)
+        return symtab[_oprnd][1] # value of id
+    elif isNumber(_oprnd):
+        match(_oprnd)
+        return _oprnd
+    else:
+        print('Syntax Error: invalid operand')
+        exit()
+
+def cond():
+    global lookahead
+    op1 = oprnd(lookahead)
+    if lookahead == '<':
+        match('<')
+        op2 = oprnd(lookahead)
+        return op1 < op2
+    elif lookahead == '>':
+        match('>')
+        op2 = oprnd(lookahead)
+        return op1 > op2
+    elif lookahead == '<=':
+        match('<=')
+        op2 = oprnd(lookahead)
+        return op1 <= op2
+    elif lookahead == '>=':
+        match('>=')
+        op2 = oprnd(lookahead)
+        return op1 >= op2
+    elif lookahead == '==':
+        match('==')
+        op2 = oprnd(lookahead)
+        return op1 == op2
+    elif lookahead == '!=':
+        match('!=')
+        op2 = oprnd(lookahead)
+        return op1 != op2
+    
+def stmt_list():
+    global lookahead
+    global symtab
+    if isId(lookahead):
+        _id = lookahead
+        if _id not in symtab.keys():
+            print('Syntax Error: invalid Id')
+            exit()
+        else:
+            _type = symtab[_id][0]
+            _cond = bool
+            match(_id)
+            match('=')
+            symtab[_id][1] = expr(_type)
+            if lookahead == 'if':
+                _cond = cond()
+                match('else')
+                if _cond == False:
+                    symtab[_id][1] = expr(_type)
+                else:
+                    expr(_type)                    
+                match(';')
+            else:
+                match(';')         
+    elif lookahead == 'printi':
+        match('printi')
+        print(expr(int))
+    elif lookahead == 'printr':
+        match('printr')
+        print(expr(float))
 
 def prog():
     global lookahead
-    symtab = dict()
     while True:
         if isType(lookahead):
-             symtab = decl_list(symtab)
+            decl_list()
         else:
             stmt_list()
-            
+
 def isType(ch):
     types = ['int', 'real']
     if ch not in types:
         return False
     return True
 
+def getType(ch):
+    return type(ch)
+
 def isId(ch):
-    if type(ch) is str:
-        return True
-    elif isNumber(ch):
+    global reserved_words
+    if isNumber(ch):
         return False
-    elif token in reserved_words:
+    elif ch in reserved_words:
         return False
-    
+    return True
+
 def isNumber(ch):
     try:
         float(ch)
@@ -97,12 +166,13 @@ def isNumber(ch):
 import sys
 file = open(sys.argv[1], "r")
 wlist = file.read().split()
-reserved_words = [',', ';', '/', '=', '+', '-', '*', '<', '>', '<=', '>=', '==', '!=', 'if', 'else'] 
 
+symtab = dict()
+reserved_words = ['printi', 'printr','int', 'real',',', ';','(',')','^','/', '=', '+', '-', '*', '<', '>', '<=', '>=', '==', '!=', 'if', 'else'] 
 mitr = iter(wlist)
 lookahead = lexan()
 
-prog()
+prog() 
 
 if lookahead == "":
     print("pass")
