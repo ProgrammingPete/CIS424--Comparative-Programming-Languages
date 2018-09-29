@@ -60,7 +60,7 @@ def decl_list():
         
 def oprnd(_oprnd):
     global symtab
-    if _oprnd in symtab:
+    if _oprnd in symtab.keys():
         match(_oprnd)
         return symtab[_oprnd][1] # value of id
     elif isNumber(_oprnd):
@@ -98,7 +98,7 @@ def cond():
         op2 = oprnd(lookahead)
         return op1 != op2
     
-def stmt_list():
+def stmt():
     global lookahead
     global symtab
     if isId(lookahead):
@@ -131,6 +131,12 @@ def stmt_list():
         print(expr(float))
         match(';')
 
+def stmt_list():
+    global lookahead
+    stmt()
+    while isId(lookahead) or lookahead == 'printf' or lookahead == 'printi':
+        stmt()
+        
 def prog():
     global lookahead
     while True:
