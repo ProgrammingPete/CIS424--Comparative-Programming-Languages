@@ -26,7 +26,7 @@ def match(string):
     if string == lookahead:
         lookahead = lexan()
     else:
-        print('Syntax Error')
+        print(' Syntax Error')
         exit()
         
 def id_list(symtab, _type):
@@ -35,7 +35,7 @@ def id_list(symtab, _type):
     if Id not in symtab:
         if _type == 'int':
             symtab[Id] = [int,0]
-        elif _type == 'real':
+        elif _type == 'real': #reals stored as float
             symtab[Id] = [float,0]
         else:
             print('Syntax Error: Invalid Type')
@@ -43,14 +43,14 @@ def id_list(symtab, _type):
         match(Id)
     if lookahead == ',':
         match(',')
-        id_list(symtab, _type)
+        id_list(symtab, _type) #recursion
     return symtab
     
 def decl(symtab):
     global lookahead
     _type = lookahead
     match(_type)
-    if lookahead != 'int' or lookahead != 'real' or lookahead != ',' or lookahead != ';':
+    if isId(lookahead): 
         symtab = id_list(symtab, _type)
     match(';')
     return symtab
@@ -58,22 +58,46 @@ def decl(symtab):
 def decl_list(symtab):
     global lookahead
     symtab = decl(symtab)
-    while lookahead == 'int' or lookahead == 'real':
+    while isType(lookahead):
         symtab = decl(symtab)
-    return symtab     
+    return symtab
+
 def prog():
     global lookahead
     symtab = dict()
     while True:
-        if lookahead == 'int' or lookahead == 'real':
+        if isType(lookahead):
              symtab = decl_list(symtab)
         else:
             stmt_list()
+            
+def isType(ch):
+    types = ['int', 'real']
+    if ch not in types:
+        return False
+    return True
 
+def isId(ch):
+    if type(ch) is str:
+        return True
+    elif isNumber(ch):
+        return False
+    elif token in reserved_words:
+        return False
+    
+def isNumber(ch):
+    try:
+        float(ch)
+        return True
+    except ValueError:
+        return False
+
+    
 #start of the program
 import sys
 file = open(sys.argv[1], "r")
 wlist = file.read().split()
+reserved_words = [',', ';', '/', '=', '+', '-', '*', '<', '>', '<=', '>=', '==', '!=', 'if', 'else'] 
 
 mitr = iter(wlist)
 lookahead = lexan()
