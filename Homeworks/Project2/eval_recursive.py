@@ -148,6 +148,9 @@ def prog():
             decl_list()
         else:
             stmt_list()
+        if lookahead == '':
+            print('Pass')
+            break
 
 def isType(ch):
     types = ['int', 'real']
@@ -185,9 +188,3 @@ mitr = iter(wlist)
 lookahead = lexan()
 
 prog() 
-
-if lookahead == "":
-    print("pass")
-else:
-    print("Syntax Error")
-    exit()
