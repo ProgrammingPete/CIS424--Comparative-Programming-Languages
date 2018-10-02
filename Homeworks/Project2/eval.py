@@ -66,7 +66,7 @@ def oprnd(_type,_oprnd):
         match(_oprnd)
         return check_type(_oprnd,_type)
     else:
-        print('Syntax Error: invalid operand')
+        print('Syntax Error: invalid operand: ' _oprnd)
         exit()
 
 def cond(_type):
@@ -97,7 +97,7 @@ def cond(_type):
         op2 = oprnd(_type,lookahead)
         return op1 != op2
     else:
-        print('Syntax Error: invalid operand')
+        print('Syntax Error: invalid operator: ', lookahead)
         exit()
 #term
 def term(_type):
@@ -135,6 +135,7 @@ def base(_type):
     
     
 def factor(_type):
+    global lookahead
     op = base(_type)
     if lookahead == '^':
         match('^')
