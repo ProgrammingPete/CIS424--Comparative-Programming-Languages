@@ -66,7 +66,7 @@ def oprnd(_type,_oprnd):
         match(_oprnd)
         return check_type(_oprnd,_type)
     else:
-        print('Syntax Error: invalid operand: ' _oprnd)
+        print('Syntax Error: invalid operand: ', _oprnd)
         exit()
 
 def cond(_type):
@@ -129,7 +129,7 @@ def base(_type):
         match(v)
         return check_type(v, _type)
     else:
-        print('Syntax Error: Invalid Base, ' lookahead)
+        print('Syntax Error: Invalid Base, ', lookahead)
         exit()
             
     
