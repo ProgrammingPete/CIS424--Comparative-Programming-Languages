@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-#
+#Project 2
+#Peter Parianos, Azam Ashrabkhujaev 
 #Input is separated by spaces.
 #
 #type    id_list
@@ -8,12 +9,10 @@
 #this pertains to the lexan() lexical analyzer
 #
 #variables  must be declared beofre being used. Also initialized to 0
-#create symbol table mapping 'variable_name': [type, val] (dictionaries)
+#create symbol table mapping 'variable_name': val (dictionaries)
 #
-#use type() to return the type. can tell if it is an interger or a float
-#"""
 
-def lexan():
+def lexan(): # lexical analyzer
     global mitr
     #we will test the iteration and if an exception occurs, lexan() will return NULL
     try:
@@ -26,7 +25,7 @@ def match(ch):
     if ch == lookahead:
         lookahead = lexan()
     else:
-        print('Syntax Error')
+        print('Syntax Error: missing', ch)
         exit()
         
 def id_list(_type):
@@ -35,9 +34,9 @@ def id_list(_type):
     _id = lookahead
     if _id not in symtab:
         if _type == 'int':
-            symtab[_id] = [int,0]
+            symtab[_id] = 0 # this makes more sense since 0 is int and 0.0 is float
         elif _type == 'real': #reals stored as float
-            symtab[_id] = [float,0]
+            symtab[_id] = 0.0
         match(_id)
     if lookahead == ',':
         match(',')
@@ -58,46 +57,106 @@ def decl_list():
     while isType(lookahead):
         decl()
         
-def oprnd(_oprnd):
+def oprnd(_type,_oprnd):
     global symtab
     if _oprnd in symtab.keys():
         match(_oprnd)
-        return symtab[_oprnd][1] # value of id
+        return check_type(symtab[_oprnd], _type) # value of id
     elif isNumber(_oprnd):
         match(_oprnd)
-        return _oprnd
+        return check_type(_oprnd,_type)
     else:
         print('Syntax Error: invalid operand')
         exit()
 
-def cond():
+def cond(_type):
     global lookahead
-    op1 = oprnd(lookahead)
+    op1 = oprnd(_type,lookahead)
     if lookahead == '<':
         match('<')
-        op2 = oprnd(lookahead)
+        op2 = oprnd(_type,lookahead)
         return op1 < op2
     elif lookahead == '>':
         match('>')
-        op2 = oprnd(lookahead)
+        op2 = oprnd(_type,lookahead)
         return op1 > op2
     elif lookahead == '<=':
         match('<=')
-        op2 = oprnd(lookahead)
+        op2 = oprnd(_type,lookahead)
         return op1 <= op2
     elif lookahead == '>=':
         match('>=')
-        op2 = oprnd(lookahead)
+        op2 = oprnd(_type,lookahead)
         return op1 >= op2
     elif lookahead == '==':
         match('==')
-        op2 = oprnd(lookahead)
+        op2 = oprnd(_type,lookahead)
         return op1 == op2
     elif lookahead == '!=':
         match('!=')
-        op2 = oprnd(lookahead)
+        op2 = oprnd(_type,lookahead)
         return op1 != op2
+    else:
+        print('Syntax Error: invalid operand')
+        exit()
+#term
+def term(_type):
+    global lookahead
+    f = factor(_type)
+    while True:
+        if lookahead == '*':
+            match('*')
+            f *= factor(_type)
+        elif lookahead == '/':
+            match('/')
+            f /= factor(_type)
+        else:
+            return f
+
+def base(_type):
+    global lookahead
+    if lookahead == '(': #( <expr> )
+        match('(')
+        v = expr(_type)
+        match(')')
+        return check_type(v, _type)
+    elif lookahead in symtab.keys(): #id
+        _id = lookahead
+        match(_id)
+        return check_type(symtab[_id], _type)
+    elif isNumber(lookahead): # intnum, realnum
+        v = lookahead
+        match(v)
+        return check_type(v, _type)
+    else:
+        print('Syntax Error: Invalid Base, ' lookahead)
+        exit()
+            
     
+    
+def factor(_type):
+    op = base(_type)
+    if lookahead == '^':
+        match('^')
+        return pow(op,factor(_type))
+    else:
+        return op
+    
+    
+#expr
+def expr(_type):
+    global lookahead
+    v = term(_type)
+    while True:
+        if lookahead == '+':
+            match('+')
+            v += term(_type)
+        elif lookahead == '-':
+            match('-')
+            v -= term(_type)
+        else:
+            return v
+        
 def stmt():
     global lookahead
     global symtab
@@ -107,17 +166,17 @@ def stmt():
             print('Syntax Error: invalid Id')
             exit()
         else:
-            _type = symtab[_id][0]
+            _type = type(symtab[_id])
             _cond = bool
             match(_id)
             match('=')
-            symtab[_id][1] = expr(_type)
+            symtab[_id] = expr(_type)
             if lookahead == 'if':
                 match('if')
-                _cond = cond()
+                _cond = cond(_type)
                 match('else')
                 if _cond == False:
-                    symtab[_id][1] = expr(_type)
+                    symtab[_id] = expr(_type)
                 else:
                     expr(_type)                    
                 match(';')
@@ -132,7 +191,7 @@ def stmt():
         print(expr(float))
         match(';')
     else:
-        print('Syntax Error: Invalid Symbol')
+        print('Syntax Error: Invalid Symbol: ', lookahead)
         exit()
 
 def stmt_list():
@@ -146,26 +205,39 @@ def prog():
     while True:
         if isType(lookahead):
             decl_list()
-        else:
+            continue
+        elif lookahead != '':
             stmt_list()
-        if lookahead == '':
+            continue
+        else:
             print('Pass')
-            break
-
+            exit()
+            
+#######################
+#peripheral functions
 def isType(ch):
     types = ['int', 'real']
     if ch not in types:
         return False
     return True
 
-def getType(ch):
-    return type(ch)
+def check_type(ch, _type):
+    try:
+        if _type == int:
+            return int(ch)
+        if _type == float:
+            return float(ch)
+    except ValueError:
+        print('Syntax Error: Invalid Type: ', ch)
+        exit()
 
 def isId(ch):
     global reserved_words
     if isNumber(ch):
         return False
     elif ch in reserved_words:
+        return False
+    elif ch == '':
         return False
     return True
 
@@ -175,7 +247,9 @@ def isNumber(ch):
         return True
     except ValueError:
         return False
-
+    
+#############################
+    ##################
     
 #start of the program
 import sys
@@ -187,4 +261,4 @@ reserved_words = ['printi', 'printr','int', 'real',',', ';','(',')','^','/', '='
 mitr = iter(wlist)
 lookahead = lexan()
 
-prog() 
+prog()
