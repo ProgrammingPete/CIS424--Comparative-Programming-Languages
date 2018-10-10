@@ -16,7 +16,7 @@ def lexan(): # lexical analyzer
     global mitr
     #we will test the iteration and if an exception occurs, lexan() will return NULL
     try:
-        return(next(mitr)) # this will advance the element by one, the next item in the list
+        return next(mitr) # this will advance the element by one, the next item in the list
     except StopIteration:
         return ''
 
@@ -224,10 +224,14 @@ def isType(ch):
 
 def check_type(ch, _type):
     try:
+        ch = str(ch)
         if _type == int:
             return int(ch)
         if _type == float:
-            return float(ch)
+            if '.' in ch:
+                return float(ch)
+            else:
+                return float('blah')
     except ValueError:
         print('Syntax Error: Invalid Type: ', ch)
         exit()
