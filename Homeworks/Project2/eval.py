@@ -45,7 +45,7 @@ def id_list(_type):
     
 def decl():
     global lookahead
-    _type = lookahead
+    _type = lookahead #this is _type only for lookahead
     match(_type)
     if isId(lookahead): 
         id_list(_type)
@@ -139,7 +139,7 @@ def factor(_type):
     op = base(_type)
     if lookahead == '^':
         match('^')
-        return pow(op,factor(_type))
+        return pow(op,factor(_type))  #pow function is op^factor(_type)
     else:
         return op
     
@@ -168,7 +168,7 @@ def stmt():
             exit()
         else:
             _type = type(symtab[_id])
-            _cond = bool
+            _cond = bool  #this is used to check whter to update the value of smtab or not
             match(_id)
             match('=')
             symtab[_id] = expr(_type)
@@ -177,19 +177,19 @@ def stmt():
                 _cond = cond(_type)
                 match('else')
                 if _cond == False:
-                    symtab[_id] = expr(_type)
+                    symtab[_id] = expr(_type) #updated value chosen
                 else:
                     expr(_type)                    
                 match(';')
             else:
                 match(';')         
-    elif lookahead == 'printi':
+    elif lookahead == 'printi': 
         match('printi')
-        print(expr(int))
+        print(expr(int)) #_type = int
         match(';')
     elif lookahead == 'printr':
         match('printr')
-        print(expr(float))
+        print(expr(float))#_type = float
         match(';')
     else:
         print('Syntax Error: Invalid Symbol: ', lookahead)
