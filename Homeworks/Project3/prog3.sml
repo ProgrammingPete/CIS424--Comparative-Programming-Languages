@@ -1,6 +1,6 @@
 (*Data to be used*)
 val L = [1,2,3,4,5];
-val negLreal = [1.0,~1.4,~5.6,2.0];
+val negLreal = [1.0,~1.4,~5.6,2.0, 4.0, 3.1, 2.9999];
 val a = 1;
 val b = 5;
 val c = 7;
@@ -32,9 +32,24 @@ fun flipL(nil) = nil
 flipL(L);
 
 (*Problem 5: Use the function Map and an anonymous function to replace every negative element of a list of reals by 0.0*)
+(* This is making my own function *)
 fun Map(f, nil) = nil
 	| Map(f, x ::xr) = f(x) :: Map(f, xr);
 
 Map(fn (x:real) => if x < 0.0 then 0.0 else x, negLreal);
 
-(*Problem 6:: Use the function Reduce and an anonymous function to find the minimum of a list of reals. *)
+
+(*This is using the built in function
+map (fn (x:real) => if x < 0.0 then 0.0 else x) negLreal; *)
+
+(*Problem 6:: Use the function Reduce and an anonymous function to find the minimum of a list of reals.
+	I wrote reduce with currying.*)
+fun reduce f b nil = b
+	| reduce f  b (x :: xr) = f(x, reduce f b xr) ;
+
+
+(*This is using the built in library function as foldl*)
+reduce (fn (x, y) => if x < y then x else y) 5 L ; 
+
+(* Problem 7: Uses built in function List.filter *)
+List.filter (fn x => x >= 2.0 andalso x <= 3.0) negLreal;
