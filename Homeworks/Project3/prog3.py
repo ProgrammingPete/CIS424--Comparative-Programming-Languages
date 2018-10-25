@@ -1,12 +1,12 @@
 import functools #includes built in reduce function
 L = [-1.2, 3.3333, -5.6, 5.0, 3.0001, 2.5, 2.8]
 
-#Problem 5
+#Problem 5. map() is a built-in function that works like Map() in ML
 itr = map(lambda x : 0.0 if x < 0.0 else x, L)
 print('Negative numbers removed: ', list(itr))
 
 
-#Problem 6
+#Problem 6: functools.reduce works just like reduce in ML
 print('Minimum in the list: ', functools.reduce(lambda x, y : x if x < y else y, L))
 
 

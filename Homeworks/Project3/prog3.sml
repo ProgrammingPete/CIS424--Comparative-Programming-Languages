@@ -16,17 +16,22 @@ nothird(L);
 
 (*Problem 3: Given three integers, use nested if to produce a 2-tuple containing the (largest,smallest). At least three comparisons will be made*)
 fun largesmall(x, y, z) = if x > y
-						  then largesmall(y, x, z)
+						  then largesmall(y, x, z) (*This uses recursion to cahnge the positions of the number*)
 						  else if y > z
 							   then largesmall(x, z, y)
 							   else if x > z
 							        then largesmall(z, y, x)
-									else (z, x);
-largesmall(a,c,b);
+									else (z, x); (*If all if are false, the integers are sorted from greatest to least. *)
+largesmall(a,c,b); (*All permutations tested*)
+largesmall(a,b,c);
+largesmall(b,a,c);
+largesmall(b,c,a);
+largesmall(c,a,b);
+largesmall(c,b,a);
 
 (*Problem 4: Write a function that flips alternate elements of a list*)
 fun flipL(nil) = nil
-	| flipL(a :: nil) = [a]
+	| flipL(a :: nil) = [a]  (*If a is a singleton list, then return just that element in a list*)
 	| flipL(a :: b :: xr) = b :: a :: flipL(xr);
 
 flipL(L);
@@ -43,13 +48,17 @@ Map(fn (x:real) => if x < 0.0 then 0.0 else x, negLreal);
 map (fn (x:real) => if x < 0.0 then 0.0 else x) negLreal; *)
 
 (*Problem 6:: Use the function Reduce and an anonymous function to find the minimum of a list of reals.
-	I wrote reduce with currying.*)
-fun reduce f b nil = b
-	| reduce f  b (x :: xr) = f(x, reduce f b xr) ;
+	I wrote reduce without currying. Currying uses a space for the delimiter instead of a comma and parentheses.
+	This was covered in the book. There is also a built-in function that I could have used.*)
+exception EmptyList
+
+fun reduce(f, nil) = raise EmptyList
+	| reduce(f, [a]) = a
+	| reduce (f, x :: xr) = f(x, reduce(f, xr)) ;
 
 
-(*This is using the built in library function as foldl*)
-reduce (fn (x, y) => if x < y then x else y) 5 L ; 
+(*I used my function but there is a built-in function called foldl that does the same thing. *)
+reduce(fn (x, y) => if x < y then x else y, L) ; (*y is the returned value from the recursively called function. *)
 
-(* Problem 7: Uses built in function List.filter *)
-List.filter (fn x => x >= 2.0 andalso x <= 3.0) negLreal;
+(* Problem 7: Uses built in function List.filter. The built in function uses currying, which uses a space as a delimiter instead of a comma.  *)
+List.filter (fn x => x >= 2.0 andalso x <= 3.0) negLreal ;
