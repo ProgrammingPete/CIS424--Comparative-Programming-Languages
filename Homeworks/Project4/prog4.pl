@@ -28,3 +28,8 @@ brother(X,Y):- sibling(X,Y), male(X).
 aunt(X,Y):- parent(Z,Y), sibling(Z,X), female(X).
 granddaughter(X,Y):- female(X), ! , parent(Z,X), parent(Y,Z).
 descendant(X,Y) :- parent(Y,X).
+
+%Problem 2
+lastelm(X, [X]).
+lastelm(X, [_|Z]) :- lastelm(X,Z).
+
