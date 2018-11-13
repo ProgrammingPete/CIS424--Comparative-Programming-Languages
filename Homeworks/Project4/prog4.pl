@@ -26,7 +26,6 @@ parent(X,Y) :- father(X,Y).
 sibling(X,Y):- parent(Z,X), parent(Z,Y), not(X = Y).
 brother(X,Y):- sibling(X,Y), male(X).
 aunt(X,Y):- parent(Z,Y), sibling(Z,X), female(X).
-%I used ! here because the tree can end and other propostions do not need to be checked
 granddaughter(X,Y):- female(X), parent(Z,X), parent(Y,Z).
 descendant(X,Y) :- parent(Y,X).
 
