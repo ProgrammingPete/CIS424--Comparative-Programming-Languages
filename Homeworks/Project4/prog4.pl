@@ -1,29 +1,11 @@
-
-male(mushu).
-male(tangdee).
-female(mulan).
-female(beumei).
-female(gugu).
-
-
-father(baba,mushu).
-father(baba,mulan).
-father(yeye,baba).
-father(yeye,gugu).
-father(yeye,susu).
-father(susu,tangdee).
-father(zengzufu,yeye).
-father(jojo,beumei).
-
-mother(mama,mushu).
-mother(mama,mulan).
-mother(popo,mama).
-mother(popo,jojo).
-
-%added rules. A parent can be ether a mother or a father.
+:- include(family_tree). % this line textualy include the family_tree.pl
+%at the beginning of this file.
+%
+%added rules. A female or male can be ether a mother or a father.
 female(X) :- mother(X, Y).
 male(X) :- father(X,Y).
 
+% A parent can be either a mother or a father
 parent(X,Y) :- mother(X,Y).
 parent(X,Y) :- father(X,Y).
 
