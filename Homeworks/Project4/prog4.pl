@@ -5,6 +5,7 @@ female(mulan).
 female(beumei).
 female(gugu).
 
+
 father(baba,mushu).
 father(baba,mulan).
 father(yeye,baba).
@@ -20,6 +21,9 @@ mother(popo,mama).
 mother(popo,jojo).
 
 %added rules. A parent can be ether a mother or a father.
+female(X) :- mother(X, Y).
+male(X) :- father(X,Y).
+
 parent(X,Y) :- mother(X,Y).
 parent(X,Y) :- father(X,Y).
 
@@ -28,6 +32,8 @@ brother(X,Y):- sibling(X,Y), male(X).
 aunt(X,Y):- parent(Z,Y), sibling(Z,X), female(X).
 granddaughter(X,Y):- female(X), parent(Z,X), parent(Y,Z).
 descendant(X,Y) :- parent(Y,X).
+descendant(X,Y) :- parent(Z,X), parent(Y,Z).
+descendant(X,Y) :- parent(Z,X), parent(R,Z), parent(Y,R).
 
 %Problem 2
 lastelm(X, [X]).
